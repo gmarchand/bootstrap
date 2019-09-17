@@ -1,76 +1,118 @@
 #!/bin/bash
 
-set -ufo pipefail
+set -euxo pipefail
 
 ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text)
+CURRENT_REGION=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone | sed 's/\(.*\)[a-z]/\1/')
 RED='\033[0;31m'
 YELLOW='\033[1;33m'
 NC='\033[0m'
 
+export INFOPATH="/home/linuxbrew/.linuxbrew/share/info"
 
 function _logger() {
     echo -e "$(date) ${YELLOW}[*] $@ ${NC}"
 }
 
-function install_c9_cli() {
-    _logger "[+] Installing c9 CLI"
-    npm install -g c9
-}
-
 function add_attendees_to_cloud9() {
-    _logger "[*] Getting list of Cloud9 Environments"
-    for env in $(aws cloud9 list-environments --query 'environmentIds' --output text)
-        do
-            for user in $(aws iam list-users --query 'Users[*].Arn' --output text)
-                do
-                    _logger "[+] Adding IAM User ${user} to Cloud9 Environment ${env}"
-                    aws cloud9 create-environment-membership \
-                        --environment-id ${env} \
-                        --user-arn ${user} \
-                        --permissions read-write
-                done
+    # Cloud9 Environment has a limit of 20 IAM users you can share with
+    # Therefore, we only add service and presenter users
+    C9_IDS=($(aws cloud9 list-environments --query 'environmentIds' --output text))
+    for env in ${C9_IDS[@]}; do
+        _logger "[*] Getting list of Cloud9 Environments"
+        C9_ENV=($(aws cloud9 describe-environments --environment-ids ${env} --query 'environments[*].name' --output text))
+        for workspace in ${C9_ENV[@]}; do
+            for user_no in $(seq 1 5); do
+                _logger "[+] Adding IAM User ${user_no} to Cloud9 ${workspace} Environment"
+                aws cloud9 create-environment-membership \
+                    --environment-id ${env} \
+                    --user-arn arn:aws:iam::${ACCOUNT_ID}:user/${workspace}ServiceUser${user_no} \
+                    --permissions read-write
+            done
         done
-}
+    done
 
+    for presenter_no in $(seq 1 4); do
+        _logger "[+] Adding Presenter ${presenter_no} to Cloud9 ${workspace} Environment"
+        aws cloud9 create-environment-membership \
+            --environment-id ${env} \
+            --user-arn arn:aws:iam::${ACCOUNT_ID}:user/Presenter${presenter_no} \
+            --permissions read-write
+    done
+}
 
 function upgrade_sam_cli() {
-    _logger "[+] Upgrading system packages"
-    sudo yum update -y
-    _logger "[+] Upgrading Python pip and setuptools"
-    sudo python3 -m pip install --upgrade pip
-    sudo python3 -m pip install --upgrade setuptools
-    _logger "[+] Upgrades AWS CLI version as Sept '18 version has dependency issues"
-    pip install awscli --upgrade --user
-    _logger "[+] Installing new SAM CLI"
-    pip install aws-sam-cli --user
-    _logger "[+] Backup up current SAM CLI"
+    _logger "[+] Backing up current SAM CLI"
     cp $(which sam) ~/.sam_old_backup
-    _logger "[+] Backup up current SAM CLI replacing with the latest version"
-    ln -sf ~/.local/bin/sam $(which sam)
+
+    _logger "[+] Installing latest SAM CLI"
+    # pipx install aws-sam-cli
+    # cfn-lint currently clashing with SAM CLI deps
+    ## installing SAM CLI via brew instead
+    brew tap aws/tap
+    brew install aws-sam-cli
+
+    _logger "[+] Updating Cloud9 SAM binary"
+    # Allows for local invoke within IDE (except debug run)
+    ln -sf $(which sam) ~/.c9/bin/sam
 }
 
-function update_pip_alias() {
-    _logger "[+] Updating pip command alias to Python 3 as default"
-    sed -i "/alias python\=python27/a alias pip\=\'python3 -m pip'" ~/.bashrc
+function upgrade_existing_packages() {
+    _logger "[+] Upgrading system packages"
+    sudo yum update -y
+
+    _logger "[+] Upgrading Python pip and setuptools"
+    python3 -m pip install --upgrade pip setuptools --user
+
+    _logger "[+] Installing latest AWS CLI"
+    # _logger "[+] Installing pipx, and latest AWS CLI"
+    # python3 -m pip install --user pipx
+    # pipx install awscli
+    python3 -m pip install --upgrade --user awscli
 }
 
 function install_utility_tools() {
-    _logger "[+] Installing CFN Linting tool"
-    pip install cfn-lint --upgrade --user
-    _logger "[+] Installing JSON Parsing (JQ)"
-    pip install jq --upgrade --user
+    _logger "[+] Installing CFN Linting"
+    python3 -m pip install --upgrade --user cfn-lint
+
     _logger "[+] Installing c9 (Cloud9 CLI)"
     npm install -g c9
 }
 
+function configure_aws_cli() {
+    _logger "[!] Overriding AWS CLI configuration... don't forget to attach IAM Role to EC2"
+    rm -f ~/.aws/credentials
+    cat <<-EOF >~/.aws/config
+[default]
+output = json
+region = ${CURRENT_REGION}
+
+EOF
+}
+
+function install_linuxbrew() {
+    _logger "[+] Creating touch symlink"
+    sudo ln -sf /bin/touch /usr/bin/touch
+    _logger "[+] Installing homebrew..."
+    echo | sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
+    _logger "[+] Adding homebrew in PATH"
+    test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
+    test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+    test -r ~/.bash_profile && echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.bash_profile
+    echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
+}
+
 function main() {
+    upgrade_existing_packages
+    configure_aws_cli
     add_attendees_to_cloud9
-    update_pip_alias
-    _logger "[+] Restarting Shell to reflect changes"
-    upgrade_sam_cli
-    install_c9_cli
+    install_linuxbrew
     install_utility_tools
+    upgrade_sam_cli
+
     echo -e "${RED} [!!!!!!!!!] Open up a new terminal to reflect changes ${NC}"
+    _logger "[+] Restarting Shell to reflect changes"
+    exec ${SHELL}
 }
 
 main
