@@ -102,13 +102,20 @@ function install_linuxbrew() {
     echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
 }
 
+function install_amplify() {
+    _logger "[+] Installing Amplify CLI"
+    npm install -g @aws-amplify/cli
+    npm install -g amplify-category-video
+}
+
 function main() {
     upgrade_existing_packages
     configure_aws_cli
-    add_attendees_to_cloud9
+    #add_attendees_to_cloud9
     install_linuxbrew
     install_utility_tools
     upgrade_sam_cli
+    install_amplify
 
     echo -e "${RED} [!!!!!!!!!] Open up a new terminal to reflect changes ${NC}"
     _logger "[+] Restarting Shell to reflect changes"
