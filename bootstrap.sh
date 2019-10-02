@@ -108,6 +108,11 @@ function install_amplify() {
     npm install -g amplify-category-video
 }
 
+function install_cdk() {
+    _logger "[+] Installing CDK"
+    npm install -g aws-cdk
+}
+
 function main() {
     upgrade_existing_packages
     configure_aws_cli
@@ -116,6 +121,7 @@ function main() {
     install_utility_tools
     upgrade_sam_cli
     install_amplify
+    install_cdk
 
     echo -e "${RED} [!!!!!!!!!] Open up a new terminal to reflect changes ${NC}"
     _logger "[+] Restarting Shell to reflect changes"
