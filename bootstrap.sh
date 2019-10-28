@@ -14,6 +14,14 @@ function _logger() {
     echo -e "$(date) ${YELLOW}[*] $@ ${NC}"
 }
 
+function brew_install_or_upgrade {
+    if brew ls --versions "$1" >/dev/null; then
+        HOMEBREW_NO_AUTO_UPDATE=1 brew upgrade "$1"
+    else
+        HOMEBREW_NO_AUTO_UPDATE=1 brew install "$1"
+    fi
+}
+
 function add_attendees_to_cloud9() {
     # Cloud9 Environment has a limit of 20 IAM users you can share with
     # Therefore, we only add service and presenter users
@@ -50,7 +58,7 @@ function upgrade_sam_cli() {
     # cfn-lint currently clashing with SAM CLI deps
     ## installing SAM CLI via brew instead
     brew tap aws/tap
-    brew install aws-sam-cli
+    brew_install_or_upgrade aws-sam-cli
 
     _logger "[+] Updating Cloud9 SAM binary"
     # Allows for local invoke within IDE (except debug run)
