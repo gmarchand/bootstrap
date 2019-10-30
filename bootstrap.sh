@@ -85,6 +85,9 @@ function install_utility_tools() {
 
     _logger "[+] Installing c9 (Cloud9 CLI)"
     npm install -g c9
+    
+    _logger "[+] Installing httpie"
+    brew_install_or_upgrade httpie
 }
 
 function configure_aws_cli() {
@@ -122,15 +125,14 @@ function install_cdk() {
 }
 
 function main() {
+    install_linuxbrew
     upgrade_existing_packages
     configure_aws_cli
     #add_attendees_to_cloud9
-    install_linuxbrew
     install_utility_tools
     upgrade_sam_cli
     install_amplify
     install_cdk
-
     echo -e "${RED} [!!!!!!!!!] Open up a new terminal to reflect changes ${NC}"
     _logger "[+] Restarting Shell to reflect changes"
     exec ${SHELL}
