@@ -88,6 +88,9 @@ function install_utility_tools() {
     
     _logger "[+] Installing httpie"
     brew_install_or_upgrade httpie
+    
+    _logger "[+] Installing linux tools"
+    sum yum install -y jq gettext
 }
 
 function configure_aws_cli() {
