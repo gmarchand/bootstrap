@@ -90,7 +90,7 @@ function install_utility_tools() {
     brew_install_or_upgrade httpie
     
     _logger "[+] Installing linux tools"
-    sum yum install -y jq gettext
+    sudo yum install -y jq gettext
 }
 
 function configure_aws_cli() {
