@@ -127,6 +127,15 @@ function install_cdk() {
     npm install -g aws-cdk
 }
 
+function install_containertool() {
+    _logger "[+] Installing kubectl"
+    brew install kubernetes-cli
+    
+    _logger "[+] Installing eksctl"
+    curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+    sudo mv -v /tmp/eksctl /usr/local/bin
+}
+
 function main() {
     install_linuxbrew
     upgrade_existing_packages
@@ -136,6 +145,7 @@ function main() {
     upgrade_sam_cli
     install_amplify
     install_cdk
+    install_containertool
     echo -e "${RED} [!!!!!!!!!] Open up a new terminal to reflect changes ${NC}"
     _logger "[+] Restarting Shell to reflect changes"
     exec ${SHELL}
