@@ -76,6 +76,7 @@ function upgrade_existing_packages() {
     # _logger "[+] Installing pipx, and latest AWS CLI"
     # python3 -m pip install --user pipx
     # pipx install awscli
+    python3 -m pip install --upgrade --user boto3
     python3 -m pip install --upgrade --user awscli
 }
 
