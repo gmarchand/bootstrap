@@ -126,6 +126,7 @@ function install_amplify() {
 function install_cdk() {
     _logger "[+] Installing CDK"
     npm install -g aws-cdk
+    npm install -g typescript@latest
 }
 
 function install_containertool() {
