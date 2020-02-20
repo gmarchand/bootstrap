@@ -11,6 +11,7 @@ tasks:
 
   deploy-cloud9:
     desc: launch new cloud9 env
+    deps: [deploy-bootstrap]
     cmds:
       - aws cloudformation create-stack
           --stack-name "cloud9-ide-{{.TODAY}}"
