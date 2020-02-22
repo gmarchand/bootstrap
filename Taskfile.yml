@@ -4,6 +4,9 @@ vars:
   TODAY: {sh: date +%F-%H%M%S}
 
 tasks:
+  default:
+    deps: [deploy-cloud9]
+    
   deploy-bootstrap:
     desc: deploy bootstrap file to S3
     cmds:
@@ -14,9 +17,19 @@ tasks:
     deps: [deploy-bootstrap]
     cmds:
       - aws cloudformation create-stack
-          --stack-name "cloud9-ide-{{.TODAY}}"
+          --stack-name "cloud9-ide-bootsrap-{{.TODAY}}"
           --capabilities CAPABILITY_IAM
           --template-url https://aws-quickstart.s3.amazonaws.com/quickstart-cloud9-ide/templates/cloud9-ide-instance.yaml
           --parameters ParameterKey=BootstrapScriptS3Uri,ParameterValue=s3://{{.S3_BUCKET}}/bootsrap.sh
             ParameterKey=C9InstanceType,ParameterValue=m5.large
             ParameterKey=C9Subnet,ParameterValue={{.SUBNET_ID}}
+
+  deploy-cloud9-nobootstrap:
+    desc: launch new cloud9 env without bootstrap
+    cmds:
+      - aws cloudformation create-stack
+        --stack-name "cloud9-ide-nobootsrap-{{.TODAY}}"
+        --capabilities CAPABILITY_IAM
+        --template-url https://aws-quickstart.s3.amazonaws.com/quickstart-cloud9-ide/templates/cloud9-ide-instance.yaml
+        --parameters ParameterKey=C9InstanceType,ParameterValue=m5.large
+          ParameterKey=C9Subnet,ParameterValue={{.SUBNET_ID}}
