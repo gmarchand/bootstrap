@@ -90,6 +90,12 @@ function install_utility_tools() {
     _logger "[+] Installing httpie"
     brew_install_or_upgrade httpie
     
+    _logger "[+] Installing terraform"
+    brew_install_or_upgrade terraform
+    
+    _logger "[+] Installing Task runner tool"
+    brew install go-task/tap/go-task
+    
     _logger "[+] Installing linux tools"
     sudo yum install -y jq gettext
 }

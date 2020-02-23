@@ -6,6 +6,11 @@ vars:
 tasks:
   default:
     deps: [deploy-cloud9]
+  
+  bootstrap:
+    desc : execute bootstrap.
+    cmds:
+      - sh bootstrap.sh
     
   deploy-bootstrap:
     desc: deploy bootstrap file to S3
