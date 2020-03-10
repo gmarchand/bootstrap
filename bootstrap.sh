@@ -72,12 +72,6 @@ function upgrade_existing_packages() {
     _logger "[+] Upgrading Python pip and setuptools"
     python3 -m pip install --upgrade pip setuptools --user
 
-    _logger "[+] Installing latest AWS CLI"
-    # _logger "[+] Installing pipx, and latest AWS CLI"
-    # python3 -m pip install --user pipx
-    # pipx install awscli
-    python3 -m pip install --upgrade --user boto3
-    python3 -m pip install --upgrade --user awscli
 }
 
 function install_utility_tools() {
@@ -94,10 +88,12 @@ function install_utility_tools() {
     brew_install_or_upgrade terraform
     
     _logger "[+] Installing Task runner tool"
-    brew install go-task/tap/go-task
+    brew_install_or_upgrade go-task/tap/go-task
     
     _logger "[+] Installing linux tools"
-    sudo yum install -y jq gettext
+    brew_install_or_upgrade jq
+    brew_install_or_upgrade gettext
+    brew_install_or_upgrade yq
 }
 
 function configure_aws_cli() {
@@ -123,37 +119,42 @@ function install_linuxbrew() {
     echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
 }
 
-function install_amplify() {
+function install_aws_tools() {
+    
+    _logger "[+] Installing latest AWS CLI"
+    python3 -m pip install --upgrade --user boto3
+    python3 -m pip install --upgrade --user awscli
+    python3 -m pip install --upgrade --user git-remote-codecommit
+    
     _logger "[+] Installing Amplify CLI"
     npm install -g @aws-amplify/cli
     npm install -g amplify-category-video
-}
-
-function install_cdk() {
+    
     _logger "[+] Installing CDK"
     npm install -g aws-cdk
     npm install -g typescript@latest
 }
 
-function install_containertool() {
-    _logger "[+] Installing kubectl"
-    brew install kubernetes-cli
+function install_containers_tools() {
+    _logger "[+] Installing kubernetes cli(s)"
+    brew tap weaveworks/tap
+    brew_install_or_upgrade kubernetes-cli   
+    #brew_install_or_upgrade fluxctl
+    brew_install_or_upgrade kustomize
+    brew install aws-iam-authenticator
+    brew_install_or_upgrade weaveworks/tap/eksctl
     
-    _logger "[+] Installing eksctl"
-    curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
-    sudo mv -v /tmp/eksctl /usr/local/bin
 }
 
 function main() {
+    #add_attendees_to_cloud9
     install_linuxbrew
     upgrade_existing_packages
-    configure_aws_cli
-    #add_attendees_to_cloud9
     install_utility_tools
+    configure_aws_cli
     upgrade_sam_cli
-    install_amplify
-    install_cdk
-    install_containertool
+    install_aws_tools
+    install_containers_tools
     echo -e "${RED} [!!!!!!!!!] Open up a new terminal to reflect changes ${NC}"
     _logger "[+] Restarting Shell to reflect changes"
     exec ${SHELL}
