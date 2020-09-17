@@ -14,6 +14,20 @@ function _logger() {
     echo -e "$(date) ${YELLOW}[*] $@ ${NC}"
 }
 
+
+
+function install_linuxbrew() {
+    _logger "[+] Creating touch symlink"
+    sudo ln -sf /bin/touch /usr/bin/touch
+    _logger "[+] Installing homebrew..."
+    echo | sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
+    _logger "[+] Adding homebrew in PATH"
+    test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
+    test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+    test -r ~/.bash_profile && echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.bash_profile
+    echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
+}
+
 function brew_install_or_upgrade {
     if brew ls --versions "$1" >/dev/null; then
         HOMEBREW_NO_AUTO_UPDATE=1 brew upgrade "$1"
@@ -94,6 +108,10 @@ function install_utility_tools() {
     brew_install_or_upgrade jq
     brew_install_or_upgrade gettext
     brew_install_or_upgrade yq
+    
+    _logger "[+] Installing developer tools"
+    brew_install_or_upgrade pyenv
+    npm install speccy -g
 }
 
 function configure_aws_cli() {
@@ -107,17 +125,6 @@ region = ${CURRENT_REGION}
 EOF
 }
 
-function install_linuxbrew() {
-    _logger "[+] Creating touch symlink"
-    sudo ln -sf /bin/touch /usr/bin/touch
-    _logger "[+] Installing homebrew..."
-    echo | sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
-    _logger "[+] Adding homebrew in PATH"
-    test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
-    test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-    test -r ~/.bash_profile && echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.bash_profile
-    echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
-}
 
 function install_aws_tools() {
     
@@ -141,6 +148,7 @@ function install_containers_tools() {
     brew_install_or_upgrade kubernetes-cli   
     #brew_install_or_upgrade fluxctl
     brew_install_or_upgrade kustomize
+    brew_install_or_upgrade helm
     brew install aws-iam-authenticator
     brew_install_or_upgrade weaveworks/tap/eksctl
     
