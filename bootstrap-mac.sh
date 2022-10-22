@@ -49,16 +49,16 @@ source ~/.bash_profile
 
 _logger "[+] Installing tools"
 brew_install_or_upgrade git
-git --version
 brew_install_or_upgrade httpie
-http --version
 brew_install_or_upgrade gnu-sed
+brew_install_or_upgrade bear
 brew_install_or_upgrade go-task/tap/go-task
-brew brew_install_or_upgrade gitlab-runner
+brew_install_or_upgrade gitlab-runner
 brew_install_or_upgrade ffmpeg
 brew_install_or_upgrade plantuml
 brew_install_or_upgrade youtube-dl
 brew_install_or_upgrade ocrmypdf
+brew_install_or_upgrade docker
 brew_install_or_upgrade tesseract-lang
 brew_install_or_upgrade_cask sourcetree
 brew_install_or_upgrade_cask rectangle
@@ -71,12 +71,28 @@ brew_install_or_upgrade_cask deezer
 brew_install_or_upgrade_cask visual-studio-code
 brew_install_or_upgrade_cask duet
 brew_install_or_upgrade_cask snagit
+brew_install_or_upgrade_cask audio-hijack
+brew_install_or_upgrade_cask balsamiq-wireframes
+brew_install_or_upgrade_cask camtasia
+brew_install_or_upgrade_cask deepl
+brew_install_or_upgrade_cask dropbox
+brew_install_or_upgrade_cask farrago
+brew_install_or_upgrade_cask google-drive
+brew_install_or_upgrade_cask iterm2
+brew_install_or_upgrade_cask kobo
+brew_install_or_upgrade_cask loopback
+brew_install_or_upgrade_cask miro
+brew_install_or_upgrade_cask prowritingaid
+brew_install_or_upgrade_cask pdf-expert
+brew_install_or_upgrade_cask sketchbook
+brew_install_or_upgrade_cask xmind
 
 
 _logger "[+] Installing code tools : nodejs"
 #brew uninstall --ignore-dependencies node 
 #brew uninstall --force node
 brew_install_or_upgrade nvm
+
 mkdir ~/.nvm
 echo 'export NVM_DIR=~/.nvm' >> ~/.bash_profile  
 echo 'source $(brew --prefix nvm)/nvm.sh' >> ~/.bash_profile 
