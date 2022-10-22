@@ -70,6 +70,7 @@ brew_install_or_upgrade_cask microsoft-teams
 brew_install_or_upgrade_cask deezer
 brew_install_or_upgrade_cask visual-studio-code
 brew_install_or_upgrade_cask duet
+brew_install_or_upgrade_cask snagit
 
 
 _logger "[+] Installing code tools : nodejs"
