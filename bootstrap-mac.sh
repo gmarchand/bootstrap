@@ -53,7 +53,6 @@ brew_install_or_upgrade httpie
 brew_install_or_upgrade gnu-sed
 brew_install_or_upgrade bear
 brew_install_or_upgrade go-task/tap/go-task
-brew_install_or_upgrade gitlab-runner
 brew_install_or_upgrade ffmpeg
 brew_install_or_upgrade plantuml
 brew_install_or_upgrade youtube-dl
@@ -81,11 +80,12 @@ brew_install_or_upgrade_cask google-drive
 brew_install_or_upgrade_cask iterm2
 brew_install_or_upgrade_cask kobo
 brew_install_or_upgrade_cask loopback
-brew_install_or_upgrade_cask miro
 brew_install_or_upgrade_cask prowritingaid
 brew_install_or_upgrade_cask pdf-expert
 brew_install_or_upgrade_cask sketchbook
 brew_install_or_upgrade_cask xmind
+brew_install_or_upgrade_cask pycharm
+brew_install_or_upgrade_cask boom-3d
 
 
 _logger "[+] Installing code tools : nodejs"
@@ -100,8 +100,8 @@ source ~/.bash_profile
 echo 'export NVM_DIR=~/.nvm' >> ~/.zprofile 
 echo 'source $(brew --prefix nvm)/nvm.sh' >> ~/.zprofile 
 source ~/.zprofile
-nvm install 16.3.0
-nvm use 16.3.0
+nvm install 20.11.0
+nvm use 20.11.0
 node -v
 npm -v
 
@@ -127,8 +127,8 @@ source ~/.profile
 source ~/.zshrc
 source ~/.zprofile
 
-pyenv install --skip-existing 3.10.0
-pyenv global 3.10.0
+pyenv install --skip-existing 3.12.0
+pyenv global 3.12.0
 pyenv versions
 python --version
 
@@ -141,14 +141,6 @@ cdk --version
 brew_install_or_upgrade aws-sam-cli
 sam --version
 #brew_install_or_upgrade aws-cfn-tools
-
-_logger "[+] Installing k8s tools"
-brew_install_or_upgrade kubernetes-cli
-kubectl version
-brew_install_or_upgrade aws-iam-authenticator
-brew tap weaveworks/tap
-brew_install_or_upgrade weaveworks/tap/eksctl
-eksctl version
 
 _logger "[+] cleanup"
 brew cleanup
