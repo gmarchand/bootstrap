@@ -86,6 +86,7 @@ brew_install_or_upgrade_cask sketchbook
 brew_install_or_upgrade_cask xmind
 brew_install_or_upgrade_cask pycharm
 brew_install_or_upgrade_cask boom-3d
+brew_install_or_upgrade_cask amazon-workdocs-drive
 
 
 _logger "[+] Installing code tools : nodejs"
