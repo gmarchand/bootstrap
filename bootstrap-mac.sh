@@ -87,6 +87,9 @@ brew_install_or_upgrade_cask xmind
 brew_install_or_upgrade_cask pycharm
 brew_install_or_upgrade_cask boom-3d
 brew_install_or_upgrade_cask amazon-workdocs-drive
+brew_install_or_upgrade_cask logi-options-plus
+brew_install_or_upgrade_cask bitwarden
+brew_install_or_upgrade_cask amazon-workspaces
 
 
 _logger "[+] Installing code tools : nodejs"
