@@ -57,9 +57,12 @@ brew_install_or_upgrade ffmpeg
 brew_install_or_upgrade plantuml
 brew_install_or_upgrade youtube-dl
 brew_install_or_upgrade ocrmypdf
-brew_install_or_upgrade docker
 brew_install_or_upgrade tesseract-lang
+brew_install_or_upgrade hadolint
+brew_install_or_upgrade bear
+
 brew_install_or_upgrade_cask sourcetree
+brew_install_or_upgrade_cask docker
 brew_install_or_upgrade_cask rectangle
 brew_install_or_upgrade_cask drawio
 brew_install_or_upgrade_cask alfred
@@ -91,7 +94,6 @@ brew_install_or_upgrade_cask logi-options-plus
 brew_install_or_upgrade_cask bitwarden
 brew_install_or_upgrade_cask amazon-workspaces
 
-
 _logger "[+] Installing code tools : nodejs"
 #brew uninstall --ignore-dependencies node 
 #brew uninstall --force node
@@ -108,6 +110,7 @@ nvm install 20.11.0
 nvm use 20.11.0
 node -v
 npm -v
+brew_install_or_upgrade prettier
 
 _logger "[+] Installing code tools : Python"
 brew_install_or_upgrade python
