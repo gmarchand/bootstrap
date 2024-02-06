@@ -61,6 +61,8 @@ brew_install_or_upgrade tesseract-lang
 brew_install_or_upgrade hadolint
 brew_install_or_upgrade bear
 
+brew_install_or_upgrade_cask adobe-acrobat-reader
+brew_install_or_upgrade_cask ganttproject
 brew_install_or_upgrade_cask sourcetree
 brew_install_or_upgrade_cask docker
 brew_install_or_upgrade_cask rectangle
