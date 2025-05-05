@@ -89,13 +89,15 @@ brew_install_or_upgrade_cask prowritingaid
 brew_install_or_upgrade_cask pdf-expert
 brew_install_or_upgrade_cask sketchbook
 brew_install_or_upgrade_cask xmind
-brew_install_or_upgrade_cask pycharm
 brew_install_or_upgrade_cask boom-3d
 brew_install_or_upgrade_cask amazon-workdocs-drive
 brew_install_or_upgrade_cask logi-options-plus
 brew_install_or_upgrade_cask bitwarden
 brew_install_or_upgrade_cask amazon-workspaces
-
+brew_install_or_upgrade_cask numi
+brew_install_or_upgrade_cask piezo
+brew_install_or_upgrade_cask perplexity
+brew_install_or_upgrade_cask adobe-creative-cloud
 _logger "[+] Installing code tools : nodejs"
 #brew uninstall --ignore-dependencies node 
 #brew uninstall --force node
@@ -143,13 +145,16 @@ python --version
 
 _logger "[+] Installing aws tools"
 brew tap aws/tap
+brew tap didhd/tap
+brew update
 brew_install_or_upgrade awscli
 aws --version
 brew_install_or_upgrade aws-cdk
 cdk --version
 brew_install_or_upgrade aws-sam-cli
 sam --version
-#brew_install_or_upgrade aws-cfn-tools
+brew_install_or_upgrade amazon-bedrock-client
+
 
 _logger "[+] cleanup"
 brew cleanup
