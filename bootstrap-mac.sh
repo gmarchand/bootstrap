@@ -98,6 +98,7 @@ brew_install_or_upgrade_cask numi
 brew_install_or_upgrade_cask piezo
 brew_install_or_upgrade_cask perplexity
 brew_install_or_upgrade_cask adobe-creative-cloud
+brew_install_or_upgrade_cask amazon-workdocs
 _logger "[+] Installing code tools : nodejs"
 #brew uninstall --ignore-dependencies node 
 #brew uninstall --force node
