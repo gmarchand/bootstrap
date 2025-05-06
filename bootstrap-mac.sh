@@ -100,6 +100,8 @@ brew_install_or_upgrade_cask perplexity
 brew_install_or_upgrade_cask adobe-creative-cloud
 brew_install_or_upgrade_cask amazon-workdocs
 brew_install_or_upgrade_cask zoom
+brew_install_or_upgrade_cask box-drive
+
 
 _logger "[+] Installing code tools : nodejs"
 #brew uninstall --ignore-dependencies node 
