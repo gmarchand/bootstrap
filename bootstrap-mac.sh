@@ -101,6 +101,7 @@ brew_install_or_upgrade_cask adobe-creative-cloud
 brew_install_or_upgrade_cask amazon-workdocs
 brew_install_or_upgrade_cask zoom
 brew_install_or_upgrade_cask box-drive
+brew_install_or_upgrade_cask docker
 
 
 _logger "[+] Installing code tools : nodejs"
