@@ -102,6 +102,7 @@ brew_install_or_upgrade_cask amazon-workdocs
 brew_install_or_upgrade_cask zoom
 brew_install_or_upgrade_cask box-drive
 brew_install_or_upgrade_cask docker
+brew_install_or_upgrade_cask cyberduck
 
 
 _logger "[+] Installing code tools : nodejs"
