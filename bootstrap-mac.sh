@@ -103,6 +103,7 @@ brew_install_or_upgrade_cask zoom
 brew_install_or_upgrade_cask box-drive
 brew_install_or_upgrade_cask docker
 brew_install_or_upgrade_cask cyberduck
+brew_install_or_upgrade_cask corretto
 
 
 _logger "[+] Installing code tools : nodejs"
